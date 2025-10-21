@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Учёт складского оборудования</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Перейти к содержимому</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Главная навигация">
+        <div class="sidebar__top">
+          <div class="brand">
+            <div class="brand__icon" aria-hidden="true">📦</div>
+            <div class="brand__info">
+              <span class="brand__name" data-i18n="app.name">WMS Control</span>
+              <span class="brand__subtitle" data-i18n="app.subtitle">Управление оборудованием</span>
+            </div>
+          </div>
+          <button class="sidebar__collapse" id="collapseSidebar" aria-expanded="true" aria-label="Свернуть меню">
+            <span aria-hidden="true">⮜</span>
+          </button>
+        </div>
+        <nav class="sidebar__nav">
+          <ul>
+            <li><a href="#/dashboard" data-route-link class="is-active"><span class="icon" aria-hidden="true">🏠</span><span data-i18n="nav.dashboard">Главная</span></a></li>
+            <li><a href="#/equipment" data-route-link><span class="icon" aria-hidden="true">📋</span><span data-i18n="nav.equipment">Оборудование</span></a></li>
+            <li><a href="#/warehouses" data-route-link><span class="icon" aria-hidden="true">🏭</span><span data-i18n="nav.warehouses">Склады</span></a></li>
+            <li><a href="#/transfers" data-route-link><span class="icon" aria-hidden="true">🔄</span><span data-i18n="nav.transfers">Перемещения</span></a></li>
+            <li><a href="#/writeoff" data-route-link><span class="icon" aria-hidden="true">🗑️</span><span data-i18n="nav.writeoff">Списание</span></a></li>
+            <li><a href="#/documents" data-route-link><span class="icon" aria-hidden="true">📑</span><span data-i18n="nav.documents">Документы</span></a></li>
+            <li><a href="#/reports" data-route-link><span class="icon" aria-hidden="true">📊</span><span data-i18n="nav.reports">Отчёты</span></a></li>
+            <li><a href="#/settings" data-route-link><span class="icon" aria-hidden="true">⚙️</span><span data-i18n="nav.settings">Настройки</span></a></li>
+            <li class="sidebar__accent">
+              <a href="#/equipment-add" data-route-link>
+                <span class="icon" aria-hidden="true">➕</span>
+                <span data-i18n="nav.addEquipment">Добавить оборудование</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <div class="workspace">
+        <header class="topbar" role="banner">
+          <button class="topbar__burger" id="toggleSidebar" aria-label="Открыть меню" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="topbar__actions" role="toolbar" aria-label="Действия">
+            <button class="btn btn--ghost" data-i18n="actions.create">Создать</button>
+            <button class="btn btn--ghost" data-i18n="actions.import">Импорт</button>
+            <button class="btn btn--ghost" data-i18n="actions.export">Экспорт</button>
+            <div class="topbar__divider" role="separator" aria-hidden="true"></div>
+            <div class="topbar__select">
+              <label for="languageSelect" class="sr-only" data-i18n="actions.language">Язык</label>
+              <select id="languageSelect" aria-label="Выбор языка">
+                <option value="ru">RU</option>
+                <option value="uk">UK</option>
+                <option value="en">EN</option>
+              </select>
+            </div>
+            <button class="btn btn--ghost" id="themeToggle" aria-pressed="false" data-i18n="actions.theme">
+              Светлая тема
+            </button>
+            <button class="profile" aria-haspopup="true" aria-expanded="false">
+              <span class="profile__avatar" aria-hidden="true">👤</span>
+              <span class="profile__name">Виктория</span>
+            </button>
+          </div>
+        </header>
+        <main id="mainContent" tabindex="-1">
+          <section class="view" data-route="dashboard" aria-labelledby="dashboardTitle">
+            <div class="view__header">
+              <h1 id="dashboardTitle" data-i18n="dashboard.title">Главная панель</h1>
+              <p class="view__subtitle" data-i18n="dashboard.subtitle">Краткий обзор состояния оборудования</p>
+            </div>
+            <div class="kpi-grid" role="list">
+              <article class="kpi-card" role="listitem">
+                <header>
+                  <h2 data-i18n="dashboard.kpi.total">Всего оборудования</h2>
+                  <span class="kpi-card__delta">+3% MoM</span>
+                </header>
+                <p class="kpi-card__value" id="kpiTotal">1 240</p>
+              </article>
+              <article class="kpi-card" role="listitem">
+                <header>
+                  <h2 data-i18n="dashboard.kpi.active">Активно в работе</h2>
+                  <span class="kpi-card__delta kpi-card__delta--up">+1.2% MoM</span>
+                </header>
+                <p class="kpi-card__value" id="kpiActive">932</p>
+              </article>
+              <article class="kpi-card" role="listitem">
+                <header>
+                  <h2 data-i18n="dashboard.kpi.repair">В ремонте</h2>
+                  <span class="kpi-card__delta kpi-card__delta--down">-0.5% MoM</span>
+                </header>
+                <p class="kpi-card__value" id="kpiRepair">76</p>
+              </article>
+              <article class="kpi-card" role="listitem">
+                <header>
+                  <h2 data-i18n="dashboard.kpi.writeoff">Списано</h2>
+                  <span class="kpi-card__delta">+0.8% MoM</span>
+                </header>
+                <p class="kpi-card__value" id="kpiWriteoff">35</p>
+              </article>
+            </div>
+            <section class="card" aria-labelledby="operationsTitle">
+              <header class="card__header">
+                <h2 id="operationsTitle" data-i18n="dashboard.operations.title">Последние операции</h2>
+              </header>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">№</th>
+                      <th scope="col" data-i18n="table.type">Тип</th>
+                      <th scope="col" data-i18n="table.warehouse">Склад</th>
+                      <th scope="col" data-i18n="table.person">Ответственный</th>
+                      <th scope="col" data-i18n="table.date">Дата</th>
+                      <th scope="col" data-i18n="table.status">Статус</th>
+                    </tr>
+                  </thead>
+                  <tbody id="operationsTable"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="view" data-route="equipment" aria-labelledby="equipmentTitle" hidden>
+            <div class="view__header">
+              <div>
+                <h1 id="equipmentTitle" data-i18n="equipment.title">Оборудование</h1>
+                <p class="view__subtitle" data-i18n="equipment.subtitle">Управление и поиск оборудования</p>
+              </div>
+              <div class="view__meta">
+                <span data-i18n="equipment.total">Всего:</span> <strong id="equipmentTotal">0</strong>
+              </div>
+            </div>
+            <div class="toolbar">
+              <div class="search-field">
+                <label class="sr-only" for="equipmentSearch" data-i18n="equipment.search">Поиск</label>
+                <span class="icon" aria-hidden="true">🔍</span>
+                <input id="equipmentSearch" type="search" placeholder="Поиск..." autocomplete="off" />
+              </div>
+              <a class="btn btn--primary" href="#/equipment-add" data-i18n="equipment.add">Добавить</a>
+            </div>
+            <div class="card">
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col" data-i18n="equipment.inventory">Инвентарный №</th>
+                      <th scope="col" data-i18n="equipment.name">Наименование</th>
+                      <th scope="col" data-i18n="equipment.serial">Серийный №</th>
+                      <th scope="col" data-i18n="equipment.warehouse">Склад</th>
+                      <th scope="col" data-i18n="equipment.state">Состояние</th>
+                      <th scope="col" data-i18n="equipment.person">Ответственный</th>
+                      <th scope="col" data-i18n="equipment.actions">Действия</th>
+                    </tr>
+                  </thead>
+                  <tbody id="equipmentTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" data-route="warehouses" aria-labelledby="warehousesTitle" hidden>
+            <div class="view__header">
+              <h1 id="warehousesTitle" data-i18n="warehouses.title">Склады</h1>
+              <p class="view__subtitle" data-i18n="warehouses.subtitle">Список складских площадок</p>
+              <button class="btn btn--primary" type="button" data-i18n="warehouses.add">Добавить склад</button>
+            </div>
+            <div class="warehouse-grid" id="warehouseGrid"></div>
+          </section>
+
+          <section class="view" data-route="transfers" aria-labelledby="transfersTitle" hidden>
+            <div class="view__header">
+              <h1 id="transfersTitle" data-i18n="transfers.title">Перемещения</h1>
+              <p class="view__subtitle" data-i18n="transfers.subtitle">Фиксация перемещения оборудования</p>
+            </div>
+            <div class="form-grid">
+              <form id="transferForm" class="card stack" novalidate>
+                <h2 data-i18n="transfers.formTitle">Новая запись</h2>
+                <label class="field">
+                  <span data-i18n="form.inventory">Инвентарный номер</span>
+                  <input name="inventory" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="transfers.from">Из склада</span>
+                  <input name="from" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="transfers.to">В склад</span>
+                  <input name="to" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="form.date">Дата</span>
+                  <input type="date" name="date" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="form.responsible">Ответственный</span>
+                  <input name="person" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="form.comment">Комментарий</span>
+                  <textarea name="comment" rows="3"></textarea>
+                </label>
+                <div class="form-actions">
+                  <button class="btn btn--primary" type="submit" data-i18n="form.save">Сохранить</button>
+                  <button class="btn btn--ghost" type="reset" data-i18n="form.cancel">Отмена</button>
+                </div>
+              </form>
+              <section class="card" aria-labelledby="recentTransfersTitle">
+                <header class="card__header">
+                  <h2 id="recentTransfersTitle" data-i18n="transfers.recent">Недавние перемещения</h2>
+                </header>
+                <div class="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" data-i18n="transfers.from">Из склада</th>
+                        <th scope="col" data-i18n="transfers.to">В склад</th>
+                        <th scope="col" data-i18n="form.date">Дата</th>
+                        <th scope="col" data-i18n="form.responsible">Ответственный</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transfersTable"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" data-route="writeoff" aria-labelledby="writeoffTitle" hidden>
+            <div class="view__header">
+              <h1 id="writeoffTitle" data-i18n="writeoff.title">Списание</h1>
+              <p class="view__subtitle" data-i18n="writeoff.subtitle">Регистрация списания оборудования</p>
+            </div>
+            <form id="writeoffForm" class="card stack" novalidate>
+              <label class="field">
+                <span data-i18n="form.inventory">Инвентарный номер</span>
+                <input name="inventory" required />
+              </label>
+              <label class="field">
+                <span data-i18n="writeoff.reason">Причина</span>
+                <select name="reason" required>
+                  <option value="fault" data-i18n="writeoff.fault">Неисправность</option>
+                  <option value="lost" data-i18n="writeoff.lost">Утеря</option>
+                  <option value="other" data-i18n="writeoff.other">Иное</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="writeoff.act">№ акта</span>
+                <input name="act" required />
+              </label>
+              <label class="field">
+                <span data-i18n="form.date">Дата</span>
+                <input type="date" name="date" required />
+              </label>
+              <label class="field">
+                <span data-i18n="form.responsible">Ответственный</span>
+                <input name="person" required />
+              </label>
+              <label class="field">
+                <span data-i18n="form.comment">Комментарий</span>
+                <textarea name="comment" rows="3"></textarea>
+              </label>
+              <div class="form-actions">
+                <button class="btn btn--primary" type="submit" data-i18n="form.save">Сохранить</button>
+                <button class="btn btn--ghost" type="reset" data-i18n="form.cancel">Отмена</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="view" data-route="documents" aria-labelledby="documentsTitle" hidden>
+            <div class="view__header">
+              <h1 id="documentsTitle" data-i18n="documents.title">Документы</h1>
+              <p class="view__subtitle" data-i18n="documents.subtitle">История операций с оборудованием</p>
+            </div>
+            <form id="documentsFilters" class="card filters-grid" novalidate>
+              <label class="field">
+                <span data-i18n="documents.type">Тип документа</span>
+                <select name="type">
+                  <option value="all" data-i18n="filters.any">Любой</option>
+                  <option value="incoming" data-i18n="documents.incoming">Приход</option>
+                  <option value="transfer" data-i18n="documents.transfer">Перемещение</option>
+                  <option value="writeoff" data-i18n="documents.writeoff">Списание</option>
+                  <option value="repair" data-i18n="documents.repair">Ремонт</option>
+                  <option value="return" data-i18n="documents.return">Возврат</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="filters.periodFrom">Период с</span>
+                <input type="date" name="from" />
+              </label>
+              <label class="field">
+                <span data-i18n="filters.periodTo">Период по</span>
+                <input type="date" name="to" />
+              </label>
+              <label class="field field--grow">
+                <span data-i18n="documents.search">Поиск</span>
+                <input type="search" name="search" placeholder="№ / склад / ответственный" />
+              </label>
+              <div class="filters-actions">
+                <button class="btn btn--primary" type="submit" data-i18n="filters.apply">Применить</button>
+              </div>
+            </form>
+            <div class="timeline" id="documentsTimeline"></div>
+          </section>
+
+          <section class="view" data-route="reports" aria-labelledby="reportsTitle" hidden>
+            <div class="view__header">
+              <h1 id="reportsTitle" data-i18n="reports.title">Отчёты</h1>
+              <p class="view__subtitle" data-i18n="reports.subtitle">Аналитика и экспорт данных</p>
+            </div>
+            <form id="reportsFilters" class="card filters-grid" novalidate>
+              <label class="field">
+                <span data-i18n="filters.periodFrom">Период с</span>
+                <input type="date" name="from" />
+              </label>
+              <label class="field">
+                <span data-i18n="filters.periodTo">Период по</span>
+                <input type="date" name="to" />
+              </label>
+              <label class="field">
+                <span data-i18n="reports.warehouse">Склад</span>
+                <input name="warehouse" />
+              </label>
+              <div class="filters-actions">
+                <button class="btn btn--primary" type="submit" data-i18n="filters.apply">Применить</button>
+                <button class="btn btn--ghost" type="button" id="exportCsv" data-i18n="reports.exportCsv">Excel (CSV)</button>
+                <button class="btn btn--ghost" type="button" id="exportPdf" data-i18n="reports.exportPdf">PDF</button>
+              </div>
+            </form>
+            <div class="card">
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col" data-i18n="reports.period">Период</th>
+                      <th scope="col" data-i18n="reports.items">Единиц оборудования</th>
+                      <th scope="col" data-i18n="reports.warehouse">Склад</th>
+                      <th scope="col" data-i18n="reports.responsible">Ответственный</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportsTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" data-route="settings" aria-labelledby="settingsTitle" hidden>
+            <div class="view__header">
+              <h1 id="settingsTitle" data-i18n="settings.title">Настройки</h1>
+            </div>
+            <div class="card stack">
+              <p data-i18n="settings.description">
+                Здесь появятся параметры конфигурации приложения: тема оформления, язык, формат дат и другие.
+              </p>
+              <p data-i18n="settings.placeholder">
+                Пока вы можете переключать тему и язык с помощью элементов в верхней панели.
+              </p>
+            </div>
+          </section>
+
+          <section class="view" data-route="equipment-add" aria-labelledby="equipmentAddTitle" hidden>
+            <div class="view__header">
+              <h1 id="equipmentAddTitle" data-i18n="equipmentAdd.title">Добавление оборудования</h1>
+            </div>
+            <form id="equipmentForm" class="card stack" novalidate>
+              <label class="field">
+                <span data-i18n="form.inventory">Инвентарный номер*</span>
+                <input name="inventory" required aria-required="true" />
+              </label>
+              <label class="field">
+                <span data-i18n="equipmentAdd.name">Наименование*</span>
+                <input name="name" required aria-required="true" />
+              </label>
+              <label class="field">
+                <span data-i18n="equipment.serial">Серийный номер</span>
+                <input name="serial" />
+              </label>
+              <label class="field">
+                <span data-i18n="equipment.warehouse">Склад</span>
+                <select name="warehouse" required>
+                  <option value="" disabled selected data-i18n="form.choose">Выберите</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="equipment.state">Состояние</span>
+                <select name="state" required>
+                  <option value="in_use" data-i18n="states.in_use">В работе</option>
+                  <option value="repair" data-i18n="states.repair">В ремонте</option>
+                  <option value="writeoff" data-i18n="states.writeoff">Списано</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="equipment.person">Ответственный</span>
+                <select name="person" required>
+                  <option value="" disabled selected data-i18n="form.choose">Выберите</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="form.comment">Комментарий</span>
+                <textarea name="comment" rows="3"></textarea>
+              </label>
+              <div class="form-actions">
+                <button class="btn btn--primary" type="submit" data-i18n="form.save">Сохранить</button>
+                <button class="btn btn--ghost" type="reset" data-i18n="form.cancel">Отмена</button>
+              </div>
+            </form>
+          </section>
+        </main>
+        <footer class="footer" role="contentinfo">
+          <p>&copy; <span id="year"></span> <span data-i18n="app.name">WMS Control</span></p>
+        </footer>
+      </div>
+    </div>
+
+    <dialog id="modal" class="modal" aria-modal="true" aria-labelledby="modalTitle">
+      <form method="dialog" class="modal__content">
+        <header class="modal__header">
+          <h2 id="modalTitle">Детали</h2>
+          <button type="submit" class="modal__close" aria-label="Закрыть">✕</button>
+        </header>
+        <div class="modal__body" id="modalBody"></div>
+        <footer class="modal__footer">
+          <button type="submit" class="btn btn--primary" data-i18n="modal.close">Закрыть</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <script src="assets/js/app.js" defer></script>
+  </body>
+</html>
