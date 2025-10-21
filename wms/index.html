@@ -8,8 +8,32 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
-    <a class="skip-link" href="#mainContent">Перейти к содержимому</a>
-    <div class="app-shell">
+    <div class="auth" id="authScreen" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <form class="auth__form" id="authForm" novalidate>
+        <div class="auth__header">
+          <div class="brand brand--centered">
+            <div class="brand__icon" aria-hidden="true">📦</div>
+            <div class="brand__info">
+              <span class="brand__name" data-i18n="app.name">WMS Control</span>
+              <span class="brand__subtitle" data-i18n="app.subtitle">Управление оборудованием</span>
+            </div>
+          </div>
+          <h1 id="authTitle" data-i18n="auth.title">Вход в систему</h1>
+          <p class="auth__subtitle" data-i18n="auth.subtitle">Введите логин и пароль для продолжения</p>
+        </div>
+        <label class="field">
+          <span data-i18n="auth.username">Логин</span>
+          <input type="text" name="username" id="authLogin" autocomplete="username" required />
+        </label>
+        <label class="field">
+          <span data-i18n="auth.password">Пароль</span>
+          <input type="password" name="password" id="authPassword" autocomplete="current-password" required />
+        </label>
+        <p class="auth__error" id="authError" role="alert"></p>
+        <button class="btn btn--primary auth__submit" type="submit" data-i18n="auth.submit">Войти</button>
+      </form>
+    </div>
+    <div class="app-shell" hidden aria-hidden="true">
       <aside class="sidebar" aria-label="Главная навигация">
         <div class="sidebar__top">
           <div class="brand">
@@ -50,9 +74,9 @@
             <span></span>
           </button>
           <div class="topbar__actions" role="toolbar" aria-label="Действия">
-            <button class="btn btn--ghost" data-i18n="actions.create">Создать</button>
-            <button class="btn btn--ghost" data-i18n="actions.import">Импорт</button>
-            <button class="btn btn--ghost" data-i18n="actions.export">Экспорт</button>
+            <button class="btn btn--ghost" data-action="create" data-i18n="actions.create">Создать</button>
+            <button class="btn btn--ghost" data-action="import" data-i18n="actions.import">Импорт</button>
+            <button class="btn btn--ghost" data-action="export" data-i18n="actions.export">Экспорт</button>
             <div class="topbar__divider" role="separator" aria-hidden="true"></div>
             <div class="topbar__select">
               <label for="languageSelect" class="sr-only" data-i18n="actions.language">Язык</label>
@@ -65,6 +89,7 @@
             <button class="btn btn--ghost" id="themeToggle" aria-pressed="false" data-i18n="actions.theme">
               Светлая тема
             </button>
+            <input class="sr-only" type="file" id="importFile" accept=".csv,.xlsx" />
             <button class="profile" aria-haspopup="true" aria-expanded="false">
               <span class="profile__avatar" aria-hidden="true">👤</span>
               <span class="profile__name">Виктория</span>

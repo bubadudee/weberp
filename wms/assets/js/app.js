@@ -244,6 +244,23 @@ const selectors = {
   modalTitle: document.getElementById("modalTitle"),
   modalBody: document.getElementById("modalBody"),
   main: document.getElementById("mainContent"),
+  appShell: document.querySelector(".app-shell"),
+  authScreen: document.getElementById("authScreen"),
+  authForm: document.getElementById("authForm"),
+  authError: document.getElementById("authError"),
+  authLogin: document.getElementById("authLogin"),
+  authPassword: document.getElementById("authPassword"),
+  importInput: document.getElementById("importFile"),
+  actionCreate: document.querySelector('[data-action="create"]'),
+  actionImport: document.querySelector('[data-action="import"]'),
+  actionExport: document.querySelector('[data-action="export"]'),
+};
+
+let appInitialized = false;
+const AUTH_STORAGE_KEY = "wms-authenticated";
+const demoCredentials = {
+  username: "admin",
+  password: "warehouse123",
 };
 
 const badgeMap = {
@@ -508,6 +525,72 @@ function openModal({ title, body }) {
   }
 }
 
+function setAuthError(message = "") {
+  if (!selectors.authError) return;
+  selectors.authError.textContent = message;
+}
+
+function showAuthScreen() {
+  selectors.authScreen?.removeAttribute("hidden");
+  selectors.authScreen?.setAttribute("aria-hidden", "false");
+  if (selectors.authScreen) {
+    selectors.authScreen.inert = false;
+  }
+  if (selectors.appShell) {
+    selectors.appShell.setAttribute("hidden", "true");
+    selectors.appShell.setAttribute("aria-hidden", "true");
+    selectors.appShell.inert = true;
+  }
+  selectors.authLogin?.focus({ preventScroll: false });
+}
+
+function showAppShell() {
+  selectors.authScreen?.setAttribute("hidden", "true");
+  selectors.authScreen?.setAttribute("aria-hidden", "true");
+  if (selectors.authScreen) {
+    selectors.authScreen.inert = true;
+  }
+  selectors.appShell?.removeAttribute("hidden");
+  selectors.appShell?.setAttribute("aria-hidden", "false");
+  if (selectors.appShell) {
+    selectors.appShell.inert = false;
+  }
+}
+
+function initAuth() {
+  const authenticated = localStorage.getItem(AUTH_STORAGE_KEY) === "true";
+  if (authenticated) {
+    showAppShell();
+    initializeApp();
+  } else {
+    setAuthError("");
+    showAuthScreen();
+  }
+
+  selectors.authForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(selectors.authForm);
+    const username = formData.get("username")?.toString().trim();
+    const password = formData.get("password")?.toString();
+    const success = username === demoCredentials.username && password === demoCredentials.password;
+
+    if (success) {
+      localStorage.setItem(AUTH_STORAGE_KEY, "true");
+      setAuthError("");
+      showAppShell();
+      selectors.authForm.reset();
+      initializeApp();
+    } else {
+      setAuthError(t("auth.error", "Неверный логин или пароль"));
+      selectors.authPassword?.focus({ preventScroll: true });
+    }
+  });
+
+  [selectors.authLogin, selectors.authPassword].forEach((field) => {
+    field?.addEventListener("input", () => setAuthError(""));
+  });
+}
+
 function translateState(code) {
   return t(`states.${code}`, {
     in_use: "В работе",
@@ -757,7 +840,82 @@ function initModal() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initTopbarActions() {
+  selectors.actionCreate?.addEventListener("click", () => {
+    openModal({
+      title: t("actions.createTitle", "Быстрые действия"),
+      body: `
+        <p>${t("actions.createBody", "Выберите необходимое действие")}</p>
+        <div class="modal__actions">
+          <a class="btn btn--primary" href="#/equipment-add">${t("actions.createEquipment", "Добавить оборудование")}</a>
+          <a class="btn btn--ghost" href="#/transfers">${t("actions.createTransfer", "Создать перемещение")}</a>
+        </div>
+      `,
+    });
+  });
+
+  selectors.actionImport?.addEventListener("click", () => {
+    selectors.importInput?.click();
+  });
+
+  selectors.importInput?.addEventListener("change", (event) => {
+    const input = event.target;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    openModal({
+      title: t("actions.importTitle", "Импорт данных"),
+      body: `
+        <p>${t("actions.importSuccess", "Файл успешно импортирован (демо)")}</p>
+        <p class="muted">${t("actions.importHint", "Загруженный файл")}: <strong>${file.name}</strong></p>
+      `,
+    });
+
+    input.value = "";
+  });
+
+  selectors.actionExport?.addEventListener("click", () => {
+    const csv = generateEquipmentCsv();
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "equipment-export.csv";
+    link.click();
+    URL.revokeObjectURL(link.href);
+
+    openModal({
+      title: t("actions.exportTitle", "Экспорт данных"),
+      body: `<p>${t("actions.exportSuccess", "Экспорт завершён и файл сохранён (демо)")}</p>`,
+    });
+  });
+}
+
+function generateEquipmentCsv() {
+  const header = [
+    t("equipment.inventory", "Инвентарный №"),
+    t("equipment.name", "Наименование"),
+    t("equipment.serial", "Серийный №"),
+    t("equipment.warehouse", "Склад"),
+    t("equipment.state", "Состояние"),
+    t("equipment.person", "Ответственный"),
+  ];
+  const rows = state.equipment.map((item) => [
+    item.inventory,
+    item.name,
+    item.serial,
+    item.warehouse,
+    translateState(item.state),
+    item.person,
+  ]);
+  return [header, ...rows]
+    .map((row) => row.join(";"))
+    .join("\n");
+}
+
+function initializeApp() {
+  if (appInitialized) return;
+  appInitialized = true;
+
   document.getElementById("year").textContent = new Date().getFullYear();
   initSidebar();
   initTheme();
@@ -769,6 +927,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDocumentsFilters();
   initReportsFilters();
   initModal();
+  initTopbarActions();
 
   renderOperations();
   renderEquipment();
@@ -779,4 +938,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   handleRouting();
   window.addEventListener("hashchange", handleRouting);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initAuth();
 });

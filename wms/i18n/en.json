@@ -3,6 +3,14 @@
     "name": "WMS Control",
     "subtitle": "Warehouse equipment management"
   },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Enter your login and password to continue",
+    "username": "Login",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Incorrect login or password"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "equipment": "Equipment",
@@ -21,7 +29,16 @@
     "language": "Language",
     "theme": "Theme",
     "themeLight": "Light theme",
-    "themeDark": "Dark theme"
+    "themeDark": "Dark theme",
+    "createTitle": "Quick actions",
+    "createBody": "Choose what you would like to do",
+    "createEquipment": "Add equipment",
+    "createTransfer": "Create transfer",
+    "importTitle": "Import data",
+    "importSuccess": "File imported successfully (demo)",
+    "importHint": "Uploaded file",
+    "exportTitle": "Export data",
+    "exportSuccess": "Export finished and file saved (demo)"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -3,6 +3,14 @@
     "name": "WMS Control",
     "subtitle": "Керування обладнанням"
   },
+  "auth": {
+    "title": "Вхід до системи",
+    "subtitle": "Введіть логін і пароль, щоб продовжити",
+    "username": "Логін",
+    "password": "Пароль",
+    "submit": "Увійти",
+    "error": "Невірний логін або пароль"
+  },
   "nav": {
     "dashboard": "Головна",
     "equipment": "Обладнання",
@@ -21,7 +29,16 @@
     "language": "Мова",
     "theme": "Тема",
     "themeLight": "Світла тема",
-    "themeDark": "Темна тема"
+    "themeDark": "Темна тема",
+    "createTitle": "Швидкі дії",
+    "createBody": "Оберіть потрібну дію",
+    "createEquipment": "Додати обладнання",
+    "createTransfer": "Створити переміщення",
+    "importTitle": "Імпорт даних",
+    "importSuccess": "Файл успішно імпортовано (демо)",
+    "importHint": "Завантажений файл",
+    "exportTitle": "Експорт даних",
+    "exportSuccess": "Експорт виконано і файл збережено (демо)"
   },
   "dashboard": {
     "title": "Головна панель",
