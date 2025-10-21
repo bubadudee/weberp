@@ -1,0 +1,164 @@
+{
+  "app": {
+    "name": "WMS Control",
+    "subtitle": "Warehouse equipment management"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "equipment": "Equipment",
+    "warehouses": "Warehouses",
+    "transfers": "Transfers",
+    "writeoff": "Write-off",
+    "documents": "Documents",
+    "reports": "Reports",
+    "settings": "Settings",
+    "addEquipment": "Add equipment"
+  },
+  "actions": {
+    "create": "Create",
+    "import": "Import",
+    "export": "Export",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Quick overview of equipment status",
+    "kpi": {
+      "total": "Total equipment",
+      "active": "Active in use",
+      "repair": "Under maintenance",
+      "writeoff": "Written off"
+    },
+    "chart": {
+      "title": "Usage dynamics",
+      "caption": "Placeholder for a future chart"
+    },
+    "operations": {
+      "title": "Recent operations",
+      "detailTitle": "Operation"
+    },
+    "filters": {
+      "title": "Filters"
+    }
+  },
+  "table": {
+    "type": "Type",
+    "warehouse": "Warehouse",
+    "person": "Responsible",
+    "date": "Date",
+    "status": "Status"
+  },
+  "filters": {
+    "periodFrom": "Period from",
+    "periodTo": "Period to",
+    "operationType": "Operation type",
+    "any": "Any",
+    "transfer": "Transfer",
+    "writeoff": "Write-off",
+    "repair": "Repair",
+    "responsible": "Responsible",
+    "apply": "Apply"
+  },
+  "equipment": {
+    "title": "Equipment",
+    "subtitle": "Manage and search equipment",
+    "total": "Total:",
+    "search": "Search",
+    "add": "Add",
+    "inventory": "Inventory #",
+    "name": "Name",
+    "serial": "Serial #",
+    "warehouse": "Warehouse",
+    "state": "State",
+    "person": "Responsible",
+    "actions": "Actions",
+    "details": "Details"
+  },
+  "warehouses": {
+    "title": "Warehouses",
+    "subtitle": "List of warehouse locations",
+    "add": "Add warehouse"
+  },
+  "transfers": {
+    "title": "Transfers",
+    "subtitle": "Register equipment movement",
+    "formTitle": "New record",
+    "from": "From warehouse",
+    "to": "To warehouse",
+    "recent": "Recent transfers",
+    "saved": "Transfer saved (demo)"
+  },
+  "form": {
+    "inventory": "Inventory number",
+    "date": "Date",
+    "responsible": "Responsible",
+    "comment": "Comment",
+    "save": "Save",
+    "cancel": "Cancel",
+    "choose": "Select"
+  },
+  "writeoff": {
+    "title": "Write-off",
+    "subtitle": "Register equipment write-off",
+    "reason": "Reason",
+    "fault": "Fault",
+    "lost": "Lost",
+    "other": "Other",
+    "act": "Act #",
+    "saved": "Write-off saved (demo)"
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "History of equipment operations",
+    "type": "Document type",
+    "incoming": "Inbound",
+    "transfer": "Transfer",
+    "writeoff": "Write-off",
+    "repair": "Repair",
+    "return": "Return",
+    "search": "Search"
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Analytics and export",
+    "warehouse": "Warehouse",
+    "exportCsv": "Excel (CSV)",
+    "exportPdf": "PDF",
+    "period": "Period",
+    "items": "Equipment units",
+    "responsible": "Responsible"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configuration options will appear here: theme, language, date formats and more.",
+    "placeholder": "For now use the top bar to change theme and language."
+  },
+  "equipmentAdd": {
+    "title": "Add equipment",
+    "name": "Name*",
+    "saved": "Equipment added (demo)"
+  },
+  "states": {
+    "in_use": "In use",
+    "repair": "Under maintenance",
+    "writeoff": "Written off"
+  },
+  "types": {
+    "transfer": "Transfer",
+    "writeoff": "Write-off",
+    "repair": "Repair",
+    "incoming": "Inbound",
+    "return": "Return"
+  },
+  "statuses": {
+    "completed": "Completed",
+    "pending": "Pending",
+    "in_progress": "In progress"
+  },
+  "modal": {
+    "close": "Close"
+  }
+}
