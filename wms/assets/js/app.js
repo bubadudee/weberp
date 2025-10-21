@@ -292,6 +292,7 @@ function applyRoute(route) {
   routeMap.forEach((view, key) => {
     const isActive = view === target;
     view.toggleAttribute("hidden", !isActive);
+    view.classList.toggle("is-active", isActive);
     view.inert = !isActive;
   });
 
