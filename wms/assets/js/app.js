@@ -569,10 +569,13 @@ function initAuth() {
 
   selectors.authForm?.addEventListener("submit", (event) => {
     event.preventDefault();
-    const formData = new FormData(selectors.authForm);
-    const username = formData.get("username")?.toString().trim();
-    const password = formData.get("password")?.toString();
-    const success = username === demoCredentials.username && password === demoCredentials.password;
+    const usernameValue = selectors.authLogin?.value ?? "";
+    const username = usernameValue.trim();
+    const password = selectors.authPassword?.value ?? "";
+    const success =
+      typeof username === "string" &&
+      username.toLowerCase() === demoCredentials.username.toLowerCase() &&
+      password === demoCredentials.password;
 
     if (success) {
       localStorage.setItem(AUTH_STORAGE_KEY, "true");
